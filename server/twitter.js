@@ -11,15 +11,19 @@ class Twitter {
     });
   }
 
-  getTweets() {
-    const stream = this.T.stream("statuses/filter", {
-      track: "#apple",
-      language: "en"
-    });
-
-    stream.on("tweet", tweet => {
-      console.log(tweet);
-    });
+  getTweets(callback) {
+    this.T.get(
+      "search/tweets",
+      { q: "#art filter:media", count: 5 },
+      (err, data, response) => {
+        if (err) {
+          console.error(err);
+          return callback(err);
+        }
+        console.log(data);
+        callback(null, data);
+      }
+    );
   }
 }
 

@@ -1,38 +1,21 @@
 {
-  "name": "twitter-image-gallery",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "dotenv": "^8.1.0",
-    "express": "^4.17.1",
-    "lodash": "^4.17.15",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
-    "twit": "^2.2.11"
-  },
+  "name": "twitter-image-feed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "App.js",
+  "author": "Austin McGuire",
   "scripts": {
-    "start": "node ./server/App",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node ./server/App.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
   },
   "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-plugin-react": "^7.14.3",
     "prettier": "^1.18.2"
   }
 }

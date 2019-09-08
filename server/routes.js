@@ -4,9 +4,13 @@ const Twitter = require("./twitter");
 module.exports.configureRoutes = (app, config) => {
   const twitter = new Twitter(config);
 
-  app.get("/", (req, res) => {
-    twitter.getTweets();
-    res.sendFile(config.templatePath);
+  app.get("/tweets", (req, res) => {
+    twitter.getTweets((err, data) => {
+      if (err) {
+        console.error("Error: Failed to fetch tweets");
+        return res.status(500).send(err);
+      }
+      return res.json(data);
+    });
   });
-  app.use("/", express.static(config.staticContentLocation));
 };

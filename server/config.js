@@ -6,7 +6,7 @@ const staticContentLocation = path.join(__dirname, "../build");
 module.exports = {
   staticContentLocation,
   callbackPath: "auth/callback",
-  port: process.env.PORT || "3000",
+  port: process.env.PORT || "9000",
   templatePath: path.join(staticContentLocation, "index.html"),
   twitterConsumerKey: process.env.CONSUMER_KEY,
   twitterConsumerSecret: process.env.CONSUMER_SECRET,
