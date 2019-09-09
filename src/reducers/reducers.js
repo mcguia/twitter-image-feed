@@ -11,7 +11,7 @@ function fetchTweetsReducer(state = initialState.tweets, action) {
     switch (action.type) {
         case GET_TWEETS:
             return {
-                list: action.payload
+                list: action.tweets
             };
         default:
             return state;

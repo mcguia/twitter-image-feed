@@ -15,7 +15,7 @@ export const getTweets = () => {
         return axios
             .get(url)
             .then(response => {
-                dispatch(fetchTweets(response.data));
+                dispatch(fetchTweets(response.data.statuses));
             })
             .catch(error => {
                 throw error;

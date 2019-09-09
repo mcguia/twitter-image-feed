@@ -1,13 +1,13 @@
 import { createStore, applyMiddleware } from "redux";
-import promiseMiddleware from "redux-promise-middleware";
+import promise from "redux-promise-middleware";
 import thunkMiddleware from "redux-thunk";
 
-import reducers from "./reducers";
+import reducers from "../reducers/reducers";
 
 const store = createStore(
   reducers,
   {},
-  applyMiddleware(thunkMiddleware, promiseMiddleware())
+  applyMiddleware(thunkMiddleware, promise)
 );
 
 export default store;

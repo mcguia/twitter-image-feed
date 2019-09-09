@@ -1,24 +1,52 @@
 {
-  "name": "twitter-image-feed",
+  "name": "twitter-image-gallery",
   "version": "1.0.0",
-  "description": "",
-  "main": "App.js",
-  "author": "Austin McGuire",
-  "scripts": {
-    "start": "node ./server/App.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
-  },
-  "keywords": [],
-  "license": "ISC",
+  "private": true,
   "dependencies": {
+    "antd": "^3.23.2",
+    "axios": "^0.19.0",
+    "babel-plugin-import": "^1.12.1",
+    "customize-cra": "^0.6.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "redux": "^4.0.4",
+    "redux-promise-middleware": "^6.1.1",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.0.0-beta.8",
     "twit": "^2.2.11"
+  },
+  "proxy": "http://localhost:3001",
+  "scripts": {
+    "start": "react-app-rewired start",
+    "start-server": "node ./server/App.js",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "react-app-rewired": "^2.1.3"
   }
 }
