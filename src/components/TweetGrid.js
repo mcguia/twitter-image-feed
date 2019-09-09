@@ -1,32 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "redux";
+import { getTweets } from "../actions/actions";
 import styled from "styled-components";
 import Loading from "./Loading";
 import Tweet from "./Tweet";
 
-function getTweets() {
-  try {
-    return JSON.parse(this.props.tweets).statuses;
-  } catch (e) {
-    return [];
-  }
-}
-
-function useTweets() {
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    setLoading(true);
-
-    getTweets().then(() => {
+function TweetGrid() {
+  const [loading, setLoading] = useState(false);
+  const data = useSelector(store => store.tweets);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data.length) {
       setLoading(false);
-    });
-  }, []);
+    }
+  }, [data.length]);
 
-  return [loading];
-}
-
-export default function TweetGrid() {
-  const [loading] = useTweets();
+  useEffect(() => {
+    dispatch(getTweets());
+    setLoading(true);
+  }, [dispatch]);
 
   if (loading === true) {
     return <Loading />;
@@ -34,10 +26,11 @@ export default function TweetGrid() {
 
   return (
     <div className="center-container">
-      <h1 className="tweets-title">{this.title}</h1>
-      {this.getTweets().map(tweet => (
-        <Tweet tweet={tweet} />
+      {this.data.map(tweet => (
+        <Tweet tweet={tweet} key={tweet.id} />
       ))}
     </div>
   );
 }
+
+export default TweetGrid;

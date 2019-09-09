@@ -25,7 +25,7 @@ class Tweet extends Component {
     }
 
     render() {
-        return <div className="tweet-card">{this.getSubtitle()}</div>;
+        return <div className="tweet-card">{this.getTitle()}</div>;
     }
 }
 
