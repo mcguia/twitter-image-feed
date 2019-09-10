@@ -1,32 +1,42 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-const img = styled.img`
-    display: flex;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+const ThumbnailImg = styled.img`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 class Tweet extends Component {
-    getTitle() {
-        const parser = new DOMParser();
-        return parser.parseFromString(
-            `<html><body>${this.props.tweet.text}`,
-            "text/html"
-        ).body.textContent;
-    }
+  getTitle() {
+    const parser = new DOMParser();
+    return parser.parseFromString(
+      `<html><body>${this.props.tweet.text}`,
+      "text/html"
+    ).body.textContent;
+  }
 
-    getSubtitle() {
-        const tweet = this.props.tweet;
-        return `By ${tweet.user.name}, at ${new Date(
-            tweet.created_at
-        ).toUTCString()}`;
-    }
+  getImage() {
+    console.log(this.props.tweet.extended_entities.media[0]);
+    const img_url = this.props.tweet.extended_entities.media[0].media_url_https;
+    return img_url + "?format=jpg&name=small";
+  }
 
-    render() {
-        return <div className="tweet-card">{this.getTitle()}</div>;
-    }
+  getSubtitle() {
+    const tweet = this.props.tweet;
+    return `By ${tweet.user.name}, at ${new Date(
+      tweet.created_at
+    ).toUTCString()}`;
+  }
+
+  render() {
+    return (
+      <div className="image-item">
+        <ThumbnailImg src={this.getImage()}></ThumbnailImg>
+      </div>
+    );
+  }
 }
 
 export default Tweet;

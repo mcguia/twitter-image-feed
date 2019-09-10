@@ -14,13 +14,18 @@ class Twitter {
   getTweets(callback) {
     this.T.get(
       "search/tweets",
-      { q: "#art filter:media", count: 5 },
+      {
+        q: "#art filter:media -filter:retweets",
+        count: 10,
+        tweet_mode: "extended",
+        include_entities: true,
+        entities: true
+      },
       (err, data, response) => {
         if (err) {
           console.error(err);
           return callback(err);
         }
-        console.log(data);
         callback(null, data);
       }
     );
