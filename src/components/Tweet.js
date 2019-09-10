@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const ThumbnailImg = styled.img`
@@ -18,7 +19,6 @@ class Tweet extends Component {
   }
 
   getImage() {
-    console.log(this.props.tweet.extended_entities.media[0]);
     const img_url = this.props.tweet.extended_entities.media[0].media_url_https;
     return img_url + "?format=jpg&name=small";
   }
@@ -33,10 +33,16 @@ class Tweet extends Component {
   render() {
     return (
       <div className="image-item">
-        <ThumbnailImg src={this.getImage()}></ThumbnailImg>
+        {this.props.tweet.extended_entities && (
+          <ThumbnailImg src={this.getImage()}></ThumbnailImg>
+        )}
       </div>
     );
   }
 }
+
+Tweet.propTypes = {
+  tweet: PropTypes.object.isRequired
+};
 
 export default Tweet;

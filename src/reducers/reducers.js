@@ -2,24 +2,24 @@ import { combineReducers } from "redux";
 import { GET_TWEETS } from "../actions/types";
 
 const initialState = {
-    tweets: {
-        list: []
-    }
+  tweets: {
+    list: []
+  }
 };
 
 function fetchTweetsReducer(state = initialState.tweets, action) {
-    switch (action.type) {
-        case GET_TWEETS:
-            return {
-                list: action.tweets
-            };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_TWEETS:
+      return {
+        list: action.tweets
+      };
+    default:
+      return state;
+  }
 }
 
 const reducers = combineReducers({
-    tweets: fetchTweetsReducer
+  tweets: fetchTweetsReducer
 });
 
 export default reducers;

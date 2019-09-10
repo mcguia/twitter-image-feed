@@ -11,11 +11,12 @@ class Twitter {
     });
   }
 
-  getTweets(callback) {
+  getTweets(search, callback) {
+    const searchQuery = search + " filter:media -filter:retweets";
     this.T.get(
       "search/tweets",
       {
-        q: "#art filter:media -filter:retweets",
+        q: searchQuery,
         count: 10,
         tweet_mode: "extended",
         include_entities: true,
