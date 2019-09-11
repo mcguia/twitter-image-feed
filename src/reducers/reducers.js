@@ -1,11 +1,12 @@
 import { combineReducers } from "redux";
-import { GET_TWEETS } from "../actions/types";
+import { GET_TWEETS, SET_FILTER } from "../actions/types";
 
 const initialState = {
   tweets: {
-    list: []
+    list: [],
+    query: ""
   },
-  query: ""
+  filter: ""
 };
 
 function fetchTweetsReducer(state = initialState.tweets, action) {
@@ -19,9 +20,19 @@ function fetchTweetsReducer(state = initialState.tweets, action) {
       return state;
   }
 }
-
+function filterReducer(state = initialState.filter, action) {
+  switch (action.type) {
+    case SET_FILTER:
+      return {
+        filter: action.filter
+      };
+    default:
+      return state;
+  }
+}
 const reducers = combineReducers({
-  tweets: fetchTweetsReducer
+  tweets: fetchTweetsReducer,
+  filter: filterReducer
 });
 
 export default reducers;
