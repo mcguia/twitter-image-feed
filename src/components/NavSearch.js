@@ -13,7 +13,7 @@ function NavSearch() {
   };
 
   const onSearchFunction = () => {
-    dispatch(getTweets(searchValue));
+    dispatch(getTweets(searchValue, "popular"));
   };
 
   return (

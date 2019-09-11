@@ -49,7 +49,6 @@ class Tweet extends Component {
   }
 
   render() {
-    console.log(this.props.tweet);
     return (
       <Fragment>
         {this.props.tweet.extended_entities && this.getImages()}

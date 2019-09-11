@@ -4,14 +4,16 @@ import { GET_TWEETS } from "../actions/types";
 const initialState = {
   tweets: {
     list: []
-  }
+  },
+  query: ""
 };
 
 function fetchTweetsReducer(state = initialState.tweets, action) {
   switch (action.type) {
     case GET_TWEETS:
       return {
-        list: action.tweets
+        list: action.tweets,
+        query: action.query
       };
     default:
       return state;

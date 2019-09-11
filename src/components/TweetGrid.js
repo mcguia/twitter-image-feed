@@ -21,19 +21,22 @@ const ImageGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-auto-rows: minmax(50px, auto);
 
-  .image-item:nth-child(5n) {
+  .image-item:nth-child(4n) {
     grid-column-end: span 2;
   }
 `;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
 function TweetGrid() {
   const [loading, setLoading] = useState(false);
   const data = useSelector(store => store.tweets.list);
+  const query = useSelector(store => store.tweets.query);
+
   const dispatch = useDispatch();
+
+  const useHandleChange = value => {
+    dispatch(getTweets(query, value));
+  };
+
   useEffect(() => {
     if (data.length) {
       setLoading(false);
@@ -41,7 +44,7 @@ function TweetGrid() {
   }, [data.length]);
 
   useEffect(() => {
-    dispatch(getTweets());
+    dispatch(getTweets("#art", "popular"));
     setLoading(true);
   }, [dispatch]);
 
@@ -55,7 +58,7 @@ function TweetGrid() {
         <Select
           defaultValue="popular"
           style={{ width: 120 }}
-          onChange={handleChange}
+          onChange={useHandleChange}
         >
           <Option value="recent">Recent</Option>
           <Option value="popular">Popular</Option>
