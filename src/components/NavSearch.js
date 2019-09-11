@@ -12,7 +12,7 @@ function NavSearch() {
     setSearchValue(e.target.value);
   };
 
-  const onSearchFunction = e => {
+  const onSearchFunction = () => {
     dispatch(getTweets(searchValue));
   };
 

@@ -1,7 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { Card } from "antd";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
+const TwitterCard = styled(Card)`
+  .ant-card-body {
+    padding: 10px;
+  }
+  display: flex;
+  height: 400px;
+`;
 const ThumbnailImg = styled.img`
   display: flex;
   width: 100%;
@@ -18,9 +26,19 @@ class Tweet extends Component {
     ).body.textContent;
   }
 
-  getImage() {
-    const img_url = this.props.tweet.extended_entities.media[0].media_url_https;
-    return img_url + "?format=jpg&name=small";
+  getImages() {
+    const images = this.props.tweet.extended_entities.media;
+
+    return images.map(img => (
+      <div className="image-item" key={img.id}>
+        <TwitterCard hoverable>
+          <ThumbnailImg
+            alt="twitter"
+            src={img.media_url_https + "?format=jpg&name=small"}
+          />
+        </TwitterCard>
+      </div>
+    ));
   }
 
   getSubtitle() {
@@ -31,12 +49,11 @@ class Tweet extends Component {
   }
 
   render() {
+    console.log(this.props.tweet);
     return (
-      <div className="image-item">
-        {this.props.tweet.extended_entities && (
-          <ThumbnailImg src={this.getImage()}></ThumbnailImg>
-        )}
-      </div>
+      <Fragment>
+        {this.props.tweet.extended_entities && this.getImages()}
+      </Fragment>
     );
   }
 }
