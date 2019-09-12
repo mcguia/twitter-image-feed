@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import { Card, Icon } from "antd";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -118,7 +118,6 @@ const Tweet = ({ tweet }) => {
   };
 
   const getDetails = () => {
-    console.log(tweet);
     return (
       <Details>
         <span>{tweet.user.screen_name}</span>

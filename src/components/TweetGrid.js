@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Select } from "antd";
+import { Empty, Select } from "antd";
 import { getTweets, setFilter } from "../actions/actions";
 import styled from "styled-components";
 import Loading from "./Loading";
@@ -41,7 +41,6 @@ function TweetGrid() {
   const [loading, setLoading] = useState(false);
   const data = useSelector(store => store.tweets.list);
   const query = useSelector(store => store.tweets.query);
-  const filter = useSelector(store => store.filter);
 
   const dispatch = useDispatch();
 
@@ -60,10 +59,17 @@ function TweetGrid() {
     setLoading(true);
   }, [dispatch]);
 
-  useEffect(() => {}, [filter]);
-
   if (loading) {
     return <Loading />;
+  }
+
+  if (!loading && !data.length) {
+    return (
+      <Empty
+        description="Sorry, no tweets available."
+        style={{ padding: "3em" }}
+      />
+    );
   }
 
   return (
