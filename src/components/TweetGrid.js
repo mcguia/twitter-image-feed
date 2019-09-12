@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Select } from "antd";
-import { getTweets } from "../actions/actions";
+import { getTweets, setFilter } from "../actions/actions";
 import styled from "styled-components";
 import Loading from "./Loading";
 import Tweet from "./Tweet";
@@ -30,11 +30,12 @@ function TweetGrid() {
   const [loading, setLoading] = useState(false);
   const data = useSelector(store => store.tweets.list);
   const query = useSelector(store => store.tweets.query);
+  const filter = useSelector(store => store.filter);
 
   const dispatch = useDispatch();
 
   const useHandleChange = value => {
-    dispatch(getTweets(query, value));
+    dispatch(setFilter(query, value));
   };
 
   useEffect(() => {
@@ -44,9 +45,11 @@ function TweetGrid() {
   }, [data.length]);
 
   useEffect(() => {
-    dispatch(getTweets("#art", "popular"));
+    dispatch(getTweets("#art"));
     setLoading(true);
   }, [dispatch]);
+
+  useEffect(() => {}, [filter]);
 
   if (loading) {
     return <Loading />;

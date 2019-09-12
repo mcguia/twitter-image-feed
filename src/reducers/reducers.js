@@ -6,7 +6,7 @@ const initialState = {
     list: [],
     query: ""
   },
-  filter: ""
+  filter: "popular"
 };
 
 function fetchTweetsReducer(state = initialState.tweets, action) {
