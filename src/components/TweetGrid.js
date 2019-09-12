@@ -15,14 +15,25 @@ const SelectContainer = styled.div`
   position: relative;
 `;
 const ImageGrid = styled.div`
-  padding: 30px 30px 40px 30px;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-auto-rows: minmax(50px, auto);
-
-  .image-item:nth-child(4n) {
-    grid-column-end: span 2;
+  padding: 2em;
+  display: -ms-inline-grid;
+  display: inline-grid;
+  grid-gap: 20px;
+  -ms-grid-columns: (1fr) [5];
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+  @media (max-width: 1404px) {
+    -ms-grid-columns: (1fr) [4];
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 1182px) {
+    -ms-grid-columns: (1fr) [3];
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 960px) {
+    padding: 1em 0;
+    -ms-grid-columns: (1fr) [2];
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
