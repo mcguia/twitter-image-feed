@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { Card, Icon } from "antd";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import TweetModal, { useModal } from "./TweetModal";
 
 const TwitterCard = styled(Card)`
   border-radius: 4px;
@@ -87,41 +89,44 @@ const Credits = styled.div`
   width: 100%;
 `;
 
-class Tweet extends Component {
-  getImages() {
-    const tweet = this.props.tweet;
+const Tweet = ({ tweet }) => {
+  const { isVisible, toggle } = useModal();
+
+  const getImages = () => {
     const images = tweet.extended_entities.media;
 
     return images.map(img => (
       <div className="image-item" key={img.id}>
         <TwitterCard hoverable>
-          <ThumbnailContent>
-            <ThumbnailImg
-              alt="twitter"
-              src={img.media_url_https + "?format=jpg&name=small"}
-            />
-          </ThumbnailContent>
-          <Info>
-            <Credits>
-              {this.getDetails(tweet)}
-              {this.getStats(tweet)}
-            </Credits>
-          </Info>
+          <Link onClick={toggle}>
+            <ThumbnailContent>
+              <ThumbnailImg
+                alt="twitter"
+                src={img.media_url_https + "?format=jpg&name=small"}
+              />
+            </ThumbnailContent>
+            <Info>
+              <Credits>
+                {getDetails(tweet)}
+                {getStats(tweet)}
+              </Credits>
+            </Info>
+          </Link>
         </TwitterCard>
       </div>
     ));
-  }
+  };
 
-  getDetails(tweet) {
+  const getDetails = () => {
     console.log(tweet);
     return (
       <Details>
         <span>{tweet.user.screen_name}</span>
       </Details>
     );
-  }
+  };
 
-  getStats(tweet) {
+  const getStats = () => {
     return (
       <Stats>
         <span>
@@ -130,16 +135,15 @@ class Tweet extends Component {
         </span>
       </Stats>
     );
-  }
+  };
 
-  render() {
-    return (
-      <Fragment>
-        {this.props.tweet.extended_entities && this.getImages()}
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      {tweet.extended_entities && getImages()}
+      <TweetModal cancel={toggle} tweet={tweet} visible={isVisible} />
+    </Fragment>
+  );
+};
 
 Tweet.propTypes = {
   tweet: PropTypes.object.isRequired

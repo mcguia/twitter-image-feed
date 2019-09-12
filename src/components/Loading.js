@@ -1,12 +1,6 @@
 import React from "react";
+import { Icon } from "antd";
 
 export default function Loading() {
-  return (
-    <h1>
-      Loading{" "}
-      <span role="img" aria-label="Spinning emoji" className="spin">
-        🌀
-      </span>
-    </h1>
-  );
+  return <Icon type="loading" style={{ fontSize: "32px" }} />;
 }
