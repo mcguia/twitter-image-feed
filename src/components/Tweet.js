@@ -87,12 +87,14 @@ const Credits = styled.div`
   pointer-events: none;
   position: relative;
   width: 100%;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 `;
 
 const Tweet = ({ tweet }) => {
   const { isVisible, toggle } = useModal();
 
   const getImages = () => {
+    if (!tweet.extended_entities) return null;
     const images = tweet.extended_entities.media;
 
     return images.map(img => (

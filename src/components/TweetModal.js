@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Avatar, Carousel, Modal, Typography } from "antd";
+import {
+  Avatar,
+  Button,
+  Carousel,
+  Divider,
+  Icon,
+  Modal,
+  Typography
+} from "antd";
 import styled from "styled-components";
 const { Text, Title } = Typography;
 
@@ -48,6 +56,27 @@ const CarouselWrapper = styled.div`
     color: #fff;
   }
 `;
+const ImageItem = styled.div`
+  padding-bottom: 2em;
+`;
+const Level = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+const LevelLeft = styled.div`
+  justify-content: flex-start;
+  flex-basis: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+`;
+const LevelRight = styled.div`
+  justify-content: flex-end;
+  flex-basis: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+`;
+
 export const useModal = () => {
   const [isVisible, setVisible] = useState(false);
 
@@ -62,32 +91,41 @@ export const useModal = () => {
 };
 
 const TweetModal = ({ cancel, tweet, visible }) => {
+  if (!tweet.extended_entities) return null;
   const images = tweet.extended_entities.media;
-  console.log(tweet);
+  const options = {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    year: "numeric",
+    month: "short",
+    day: "2-digit"
+  };
+  const date = new Date(tweet.created_at).toLocaleDateString("en-us", options);
 
   const TweetImage = () => {
     if (images.length === 1) {
       return (
-        <div className="image-item">
+        <ImageItem>
           <img
             alt="twitter"
             src={images[0].media_url_https + "?format=jpg&name=large"}
             style={{ maxWidth: "100%" }}
           />
-        </div>
+        </ImageItem>
       );
     } else if (images.length > 1) {
       return (
         <CarouselWrapper>
-          <Carousel adaptiveHeight>
+          <Carousel adaptiveHeight arrows={true}>
             {images.map(img => (
-              <div className="image-item" key={img.id}>
+              <ImageItem key={img.id}>
                 <img
                   alt="twitter"
                   src={img.media_url_https + "?format=jpg&name=large"}
                   style={{ maxWidth: "100%" }}
                 />
-              </div>
+              </ImageItem>
             ))}
           </Carousel>
         </CarouselWrapper>
@@ -116,8 +154,34 @@ const TweetModal = ({ cancel, tweet, visible }) => {
           </UserLink>
         </Username>
       </UserInfo>
-      <Title level={4}>{tweet.full_text}</Title>
+
+      <Title level={4} style={{ paddingBottom: "1rem" }}>
+        {tweet.full_text}
+      </Title>
       <TweetImage />
+      <Text>{date}</Text>
+      <Divider />
+      <Level>
+        <LevelLeft>
+          <Icon type="retweet" style={{ paddingRight: "5px" }} />
+          {tweet.retweet_count}
+          <Icon
+            type="heart"
+            theme="filled"
+            style={{ paddingLeft: "10px", paddingRight: "5px" }}
+          />
+          {tweet.favorite_count}
+        </LevelLeft>
+        <LevelRight>
+          <a
+            href={`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button type="primary">View on Twitter</Button>
+          </a>
+        </LevelRight>
+      </Level>
     </Modal>
   );
 };
