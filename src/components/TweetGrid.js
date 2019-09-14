@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroller";
-import { Empty, Select } from "antd";
-import { getTweets, setFilter } from "../actions/actions";
+import { Empty, Select, Switch, Typography } from "antd";
+import { getTweets, setFilter, setNsfw } from "../actions/actions";
 import styled from "styled-components";
 import Loading from "./Loading";
 import Tweet from "./Tweet";
-
+const { Text } = Typography;
 const { Option } = Select;
 
 const SelectContainer = styled.div`
@@ -14,6 +14,9 @@ const SelectContainer = styled.div`
   padding: 20px 30px;
   font-size: 14px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 `;
 const ImageGrid = styled(InfiniteScroll)`
   padding: 2em;
@@ -46,6 +49,7 @@ function TweetGrid() {
     max_id,
     isFetching,
     hasMore,
+    nsfw,
     error
   } = useSelector(state => ({
     data: state.app.tweets,
@@ -54,19 +58,21 @@ function TweetGrid() {
     max_id: state.app.max_id,
     isFetching: state.app.isFetching,
     hasMore: state.app.hasMore,
+    nsfw: state.app.nsfw,
     error: state.app.error
   }));
   const isEmpty = (!isFetching && !data.length) || error !== null;
   const dispatch = useDispatch();
 
-  const useHandleChange = value => {
-    dispatch(setFilter(query, value));
+  const handleChange = value => {
+    dispatch(setFilter(query, value, nsfw, max_id));
+  };
+  const nsfwChange = value => {
+    dispatch(setNsfw(query, filter, value, max_id));
   };
   const loadFunc = () => {
-    dispatch(getTweets(query, filter, max_id));
-    console.log("scroll load...");
+    dispatch(getTweets(query, filter, nsfw, max_id));
   };
-
   useEffect(() => {
     dispatch(getTweets());
   }, [dispatch]);
@@ -92,13 +98,15 @@ function TweetGrid() {
       <SelectContainer>
         <Select
           defaultValue={filter}
-          style={{ width: 120 }}
-          onChange={useHandleChange}
+          style={{ width: 120, paddingRight: "3em" }}
+          onChange={handleChange}
         >
           <Option value="recent">Recent</Option>
           <Option value="mixed">Mixed</Option>
           <Option value="popular">Popular</Option>
         </Select>
+        <Text style={{ paddingRight: "1em" }}>include NSFW</Text>
+        <Switch onChange={nsfwChange} />
       </SelectContainer>
 
       {isEmpty ? (

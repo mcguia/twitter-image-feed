@@ -11,7 +11,7 @@ module.exports.configureRoutes = (app, config) => {
     if (max_id === "0") max_id = undefined;
     if (req.query.q !== "undefined" && req.query.q !== "") query = req.query.q;
     if (req.query.result_type !== "undefined") filter = req.query.result_type;
-    twitter.getTweets(query, filter, max_id, (err, data) => {
+    twitter.getTweets(query, filter, max_id, req.query.nsfw, (err, data) => {
       if (err) {
         console.error("Error: Failed to fetch tweets");
         return res.status(500).send(err);

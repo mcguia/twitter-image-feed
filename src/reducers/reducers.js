@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   max_id: "0",
   isFetching: false,
   hasMore: true,
+  nsfw: false,
   error: null
 };
 
@@ -20,21 +21,16 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
     case "GET_TWEETS_SUCCESS":
       var rest;
       var more = true;
-      console.log("state.tweets: ", state.tweets);
-      console.log("payload before: ", payload.tweets);
-      console.log(state.query, payload.query);
+
       if (state.max_id !== "0" && payload.query === state.query) {
         rest = payload.tweets.slice(1, payload.tweets.length);
         if (rest.length === 0) {
           more = false;
         }
         rest = [...state.tweets, ...rest];
-        console.log("combined: ", rest);
       } else {
         rest = payload.tweets;
       }
-      console.log("payload after: ", rest);
-      console.log("max_id: ", state.max_id);
 
       return {
         ...state,
@@ -56,6 +52,13 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
         ...state,
         tweets: [],
         filter: payload,
+        max_id: "0"
+      };
+    case "SET_NSFW_SUCCESS":
+      return {
+        ...state,
+        tweets: [],
+        nsfw: payload,
         max_id: "0"
       };
     default:

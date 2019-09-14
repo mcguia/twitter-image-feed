@@ -24,7 +24,7 @@ class Nav extends Component {
           <StyledMenu
             theme="dark"
             mode="horizontal"
-            style={{ lineHeight: "64px", marginRight: "300px" }}
+            style={{ lineHeight: "64px", marginRight: "200px" }}
             collapsible="false"
           >
             <Menu.Item key="1">
