@@ -1,33 +1,35 @@
-import { GET_TWEETS, SET_FILTER } from "./types";
 import axios from "axios";
 
 const url = "http://localhost:9000/tweets";
 
 export const fetchTweets = (tweets, query) => {
+  const max_id = tweets[tweets.length - 1].id_str;
   return {
-    type: GET_TWEETS,
-    query: query,
-    tweets
+    type: "GET_TWEETS_SUCCESS",
+    payload: { tweets, query, max_id }
   };
 };
-
-export const setFilter2 = filter => {
-  return {
-    type: SET_FILTER,
-    filter: filter
-  };
-};
-
-export const getTweets = (query, filter) => {
-  if (!filter) filter = "popular";
+export const getTweets = (query = "#art", filter = "mixed", max_id = "0") => {
   return dispatch => {
+    dispatch({ type: "GET_TWEETS_REQUEST" });
     return axios
-      .get(url + "?q=" + encodeURIComponent(query) + "&result_type=" + filter)
+      .get(
+        url +
+          "?q=" +
+          encodeURIComponent(query) +
+          "&result_type=" +
+          filter +
+          "&max_id=" +
+          max_id
+      )
       .then(response => {
         dispatch(fetchTweets(response.data.statuses, query));
       })
       .catch(error => {
-        throw error;
+        dispatch({
+          type: "GET_TWEETS_FAILURE",
+          payload: error
+        });
       });
   };
 };
@@ -37,11 +39,17 @@ export const setFilter = (query, filter) => {
     return axios
       .get(url + "?q=" + encodeURIComponent(query) + "&result_type=" + filter)
       .then(response => {
+        dispatch({
+          type: "SET_FILTER_SUCCESS",
+          payload: filter
+        });
         dispatch(fetchTweets(response.data.statuses, query));
-        dispatch(setFilter2(filter));
       })
       .catch(error => {
-        throw error;
+        dispatch({
+          type: "SET_FILTER_FAILURE",
+          payload: error
+        });
       });
   };
 };

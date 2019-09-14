@@ -1,38 +1,46 @@
 import { combineReducers } from "redux";
-import { GET_TWEETS, SET_FILTER } from "../actions/types";
 
-const initialState = {
-  tweets: {
-    list: [],
-    query: ""
-  },
-  filter: "popular"
+const INITIAL_STATE = {
+  tweets: [],
+  query: "",
+  filter: "mixed",
+  max_id: "0"
 };
 
-function fetchTweetsReducer(state = initialState.tweets, action) {
-  switch (action.type) {
-    case GET_TWEETS:
+function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case "GET_TWEETS_SUCCESS":
+      var rest;
+      console.log("payload before: ", payload.tweets);
+      console.log(payload.query, state.query);
+      if (state.max_id !== "0" && payload.query === state.query) {
+        rest = payload.tweets.slice(1, payload.tweets.length);
+        rest = [...state.tweets, ...rest];
+      } else {
+        rest = payload.tweets;
+      }
+      console.log("state.tweets: ", state.tweets);
+      console.log("payload minus first: ", rest);
+      console.log("max_id: ", state.max_id);
+      console.log("combined: ", [...state.tweets, ...rest]);
       return {
-        list: action.tweets,
-        query: action.query
+        ...state,
+        ...payload,
+        tweets: rest
+      };
+    case "SET_FILTER_SUCCESS":
+      return {
+        tweets: [],
+        filter: payload,
+        max_id: "0"
       };
     default:
       return state;
   }
 }
-function filterReducer(state = initialState.filter, action) {
-  switch (action.type) {
-    case SET_FILTER:
-      return {
-        filter: action.filter
-      };
-    default:
-      return state;
-  }
-}
+
 const reducers = combineReducers({
-  tweets: fetchTweetsReducer,
-  filter: filterReducer
+  app: fetchTweetsReducer
 });
 
 export default reducers;

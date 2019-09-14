@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import InfiniteScroll from "react-infinite-scroller";
 import { Empty, Select } from "antd";
 import { getTweets, setFilter } from "../actions/actions";
 import styled from "styled-components";
@@ -14,7 +15,7 @@ const SelectContainer = styled.div`
   font-size: 14px;
   position: relative;
 `;
-const ImageGrid = styled.div`
+const ImageGrid = styled(InfiniteScroll)`
   padding: 2em;
   display: -ms-inline-grid;
   display: inline-grid;
@@ -39,15 +40,21 @@ const ImageGrid = styled.div`
 
 function TweetGrid() {
   const [loading, setLoading] = useState(false);
-  const data = useSelector(store => store.tweets.list);
-  const query = useSelector(store => store.tweets.query);
+  const { data, query, filter, max_id } = useSelector(state => ({
+    data: state.app.tweets,
+    query: state.app.query,
+    filter: state.app.filter,
+    max_id: state.app.max_id
+  }));
 
   const dispatch = useDispatch();
 
   const useHandleChange = value => {
     dispatch(setFilter(query, value));
   };
-
+  const loadFunc = () => {
+    dispatch(getTweets(query, filter, max_id));
+  };
   useEffect(() => {
     if (data.length) {
       setLoading(false);
@@ -55,12 +62,16 @@ function TweetGrid() {
   }, [data.length]);
 
   useEffect(() => {
-    dispatch(getTweets("#art"));
+    dispatch(getTweets());
     setLoading(true);
   }, [dispatch]);
 
   if (loading) {
-    return <Loading />;
+    return (
+      <div style={{ textAlign: "center", padding: "3em" }}>
+        <Loading />
+      </div>
+    );
   }
 
   if (!loading && !data.length) {
@@ -76,15 +87,21 @@ function TweetGrid() {
     <div>
       <SelectContainer>
         <Select
-          defaultValue="popular"
+          defaultValue={filter}
           style={{ width: 120 }}
           onChange={useHandleChange}
         >
           <Option value="recent">Recent</Option>
+          <Option value="mixed">Mixed</Option>
           <Option value="popular">Popular</Option>
         </Select>
       </SelectContainer>
-      <ImageGrid>
+      <ImageGrid
+        pageStart={0}
+        loadMore={loadFunc}
+        hasMore={true}
+        loader={<Loading />}
+      >
         {data.length &&
           data.map(tweet => <Tweet tweet={tweet} key={tweet.id} />)}
       </ImageGrid>

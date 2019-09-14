@@ -6,7 +6,11 @@ const { Search } = Input;
 
 function NavSearch() {
   const [searchValue, setSearchValue] = useState("");
-  const filter = useSelector(store => store.filter);
+  const { query, filter, max_id } = useSelector(state => ({
+    query: state.app.query,
+    filter: state.app.filter,
+    max_id: state.app.max_id
+  }));
   const dispatch = useDispatch();
 
   const handleSearchValue = e => {
@@ -14,7 +18,11 @@ function NavSearch() {
   };
 
   const onSearchFunction = () => {
-    dispatch(getTweets(searchValue, filter));
+    var max_id_next = max_id;
+    if (query !== searchValue) {
+      max_id_next = 0;
+    }
+    dispatch(getTweets(searchValue, filter, max_id_next));
   };
 
   return (

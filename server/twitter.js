@@ -11,8 +11,9 @@ class Twitter {
     });
   }
 
-  getTweets(search, filter, callback) {
+  getTweets(search, filter, max_id, callback) {
     const searchQuery = search + " filter:media -filter:retweets";
+    console.log(searchQuery, filter, max_id);
     this.T.get(
       "search/tweets",
       {
@@ -21,7 +22,8 @@ class Twitter {
         count: 10,
         tweet_mode: "extended",
         include_entities: true,
-        entities: true
+        entities: true,
+        max_id: max_id
       },
       (err, data, response) => {
         if (err) {
