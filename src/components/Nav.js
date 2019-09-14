@@ -25,6 +25,7 @@ class Nav extends Component {
             theme="dark"
             mode="horizontal"
             style={{ lineHeight: "64px", marginRight: "300px" }}
+            collapsible="false"
           >
             <Menu.Item key="1">
               <Button ghost>Sign in with Twitter</Button>

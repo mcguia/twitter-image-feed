@@ -139,7 +139,7 @@ const Tweet = ({ tweet }) => {
   };
 
   return (
-    <Fragment>
+    <Fragment key={tweet.id}>
       {tweet.extended_entities && getImages()}
       <TweetModal cancel={toggle} tweet={tweet} visible={isVisible} />
     </Fragment>

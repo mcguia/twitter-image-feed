@@ -13,13 +13,12 @@ class Twitter {
 
   getTweets(search, filter, max_id, callback) {
     const searchQuery = search + " filter:media -filter:retweets";
-    console.log(searchQuery, filter, max_id);
     this.T.get(
       "search/tweets",
       {
         q: searchQuery,
         result_type: filter,
-        count: 10,
+        count: 20,
         tweet_mode: "extended",
         include_entities: true,
         entities: true,

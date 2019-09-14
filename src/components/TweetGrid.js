@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroller";
 import { Empty, Select } from "antd";
@@ -39,14 +39,24 @@ const ImageGrid = styled(InfiniteScroll)`
 `;
 
 function TweetGrid() {
-  const [loading, setLoading] = useState(false);
-  const { data, query, filter, max_id } = useSelector(state => ({
+  const {
+    data,
+    query,
+    filter,
+    max_id,
+    isFetching,
+    hasMore,
+    error
+  } = useSelector(state => ({
     data: state.app.tweets,
     query: state.app.query,
     filter: state.app.filter,
-    max_id: state.app.max_id
+    max_id: state.app.max_id,
+    isFetching: state.app.isFetching,
+    hasMore: state.app.hasMore,
+    error: state.app.error
   }));
-
+  const isEmpty = (!isFetching && !data.length) || error !== null;
   const dispatch = useDispatch();
 
   const useHandleChange = value => {
@@ -54,19 +64,14 @@ function TweetGrid() {
   };
   const loadFunc = () => {
     dispatch(getTweets(query, filter, max_id));
+    console.log("scroll load...");
   };
-  useEffect(() => {
-    if (data.length) {
-      setLoading(false);
-    }
-  }, [data.length]);
 
   useEffect(() => {
     dispatch(getTweets());
-    setLoading(true);
   }, [dispatch]);
 
-  if (loading) {
+  if (isFetching && !data.length) {
     return (
       <div style={{ textAlign: "center", padding: "3em" }}>
         <Loading />
@@ -74,13 +79,12 @@ function TweetGrid() {
     );
   }
 
-  if (!loading && !data.length) {
-    return (
-      <Empty
-        description="Sorry, no tweets available."
-        style={{ padding: "3em" }}
-      />
-    );
+  var items = [];
+
+  if (data.length) {
+    data.forEach((tweet, i) => {
+      items.push(<Tweet tweet={tweet} key={i} />);
+    });
   }
 
   return (
@@ -96,15 +100,22 @@ function TweetGrid() {
           <Option value="popular">Popular</Option>
         </Select>
       </SelectContainer>
-      <ImageGrid
-        pageStart={0}
-        loadMore={loadFunc}
-        hasMore={true}
-        loader={<Loading />}
-      >
-        {data.length &&
-          data.map(tweet => <Tweet tweet={tweet} key={tweet.id} />)}
-      </ImageGrid>
+
+      {isEmpty ? (
+        <Empty
+          description="Sorry, no tweets available."
+          style={{ padding: "3em" }}
+        />
+      ) : (
+        <ImageGrid
+          pageStart={0}
+          loadMore={loadFunc}
+          hasMore={!isFetching && hasMore}
+          loader={<Loading />}
+        >
+          {items}
+        </ImageGrid>
+      )}
     </div>
   );
 }

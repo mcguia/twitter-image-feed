@@ -30,7 +30,7 @@ function NavSearch() {
       placeholder="puppies, #art, etc"
       onChange={handleSearchValue}
       onSearch={onSearchFunction}
-      style={{ width: 300 }}
+      style={{ width: 200 }}
     />
   );
 }
