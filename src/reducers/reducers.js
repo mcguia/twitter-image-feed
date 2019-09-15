@@ -21,8 +21,12 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
     case "GET_TWEETS_SUCCESS":
       var rest;
       var more = true;
-
-      if (state.max_id !== "0" && payload.query === state.query) {
+      /** if filter or nsfw changed, return new batch of tweets **/
+      if (state.filter !== payload.filter || state.nsfw !== payload.nsfw) {
+        rest = [...payload.tweets];
+      } else if (state.max_id !== "0" && payload.query === state.query) {
+        /** if max_id set, and query hasn't changed, retain tweet list.
+      slice off duplicate tweet **/
         if (payload.tweets.length < 3 || state.max_id === payload.max_id) {
           rest = payload.tweets.slice(0, 1);
           more = false;
@@ -53,16 +57,12 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
     case "SET_FILTER_SUCCESS":
       return {
         ...state,
-        tweets: [],
-        filter: payload,
-        max_id: "0"
+        filter: payload
       };
     case "SET_NSFW_SUCCESS":
       return {
         ...state,
-        tweets: [],
-        nsfw: payload,
-        max_id: "0"
+        nsfw: payload
       };
     default:
       return state;
