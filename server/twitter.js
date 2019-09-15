@@ -12,7 +12,8 @@ class Twitter {
   }
 
   getTweets(search, filter, max_id, nsfw, callback) {
-    const searchQuery = search + " filter:media -filter:retweets";
+    var searchQuery = search + " filter:media -filter:retweets";
+    if (nsfw === "false") searchQuery += "  filter:safe";
     this.T.get(
       "search/tweets",
       {
@@ -22,7 +23,6 @@ class Twitter {
         tweet_mode: "extended",
         include_entities: true,
         entities: true,
-        possibly_sensitive: nsfw,
         max_id: max_id
       },
       (err, data, response) => {

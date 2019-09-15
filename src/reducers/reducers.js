@@ -23,10 +23,13 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
       var more = true;
 
       if (state.max_id !== "0" && payload.query === state.query) {
-        rest = payload.tweets.slice(1, payload.tweets.length);
-        if (rest.length === 0) {
+        if (payload.tweets.length < 3 || state.max_id === payload.max_id) {
+          rest = payload.tweets.slice(0, 1);
           more = false;
+        } else {
+          rest = payload.tweets.slice(1, payload.tweets.length);
         }
+
         rest = [...state.tweets, ...rest];
       } else {
         rest = payload.tweets;
