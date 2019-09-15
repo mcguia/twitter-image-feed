@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 const INITIAL_STATE = {
   tweets: [],
   query: "",
-  filter: "mixed",
+  sort: "mixed",
   max_id: "0",
   isFetching: false,
   hasMore: true,
@@ -21,8 +21,9 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
     case "GET_TWEETS_SUCCESS":
       var rest;
       var more = true;
-      /** if filter or nsfw changed, return new batch of tweets **/
-      if (state.filter !== payload.filter || state.nsfw !== payload.nsfw) {
+
+      if (state.sort !== payload.sort || state.nsfw !== payload.nsfw) {
+        /** if sort or nsfw changed, return new batch of tweets **/
         rest = [...payload.tweets];
       } else if (state.max_id !== "0" && payload.query === state.query) {
         /** if max_id set, and query hasn't changed, retain tweet list.
@@ -54,10 +55,10 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
         hasMore: false,
         error: payload
       };
-    case "SET_FILTER_SUCCESS":
+    case "SET_SORT_SUCCESS":
       return {
         ...state,
-        filter: payload
+        sort: payload
       };
     case "SET_NSFW_SUCCESS":
       return {

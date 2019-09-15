@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroller";
 import { Empty, Select, Switch, Typography } from "antd";
-import { getTweets, setFilter, setNsfw } from "../actions/actions";
+import { getTweets, setsort, setNsfw } from "../actions/actions";
 import styled from "styled-components";
 import Loading from "./Loading";
 import Tweet from "./Tweet";
@@ -45,7 +45,7 @@ function TweetGrid() {
   const {
     data,
     query,
-    filter,
+    sort,
     max_id,
     isFetching,
     hasMore,
@@ -54,7 +54,7 @@ function TweetGrid() {
   } = useSelector(state => ({
     data: state.app.tweets,
     query: state.app.query,
-    filter: state.app.filter,
+    sort: state.app.sort,
     max_id: state.app.max_id,
     isFetching: state.app.isFetching,
     hasMore: state.app.hasMore,
@@ -65,13 +65,13 @@ function TweetGrid() {
   const dispatch = useDispatch();
 
   const handleChange = value => {
-    dispatch(setFilter(query, value, nsfw, max_id));
+    dispatch(setsort(query, value, nsfw, max_id));
   };
   const nsfwChange = value => {
-    dispatch(setNsfw(query, filter, value, max_id));
+    dispatch(setNsfw(query, sort, value, max_id));
   };
   const loadFunc = () => {
-    dispatch(getTweets(query, filter, nsfw, max_id));
+    dispatch(getTweets(query, sort, nsfw, max_id));
   };
   useEffect(() => {
     dispatch(getTweets());
@@ -97,7 +97,7 @@ function TweetGrid() {
     <div>
       <SelectContainer>
         <Select
-          defaultValue={filter}
+          defaultValue={sort}
           style={{ width: 120, paddingRight: "3em" }}
           onChange={handleChange}
         >

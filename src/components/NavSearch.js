@@ -6,9 +6,9 @@ const { Search } = Input;
 
 function NavSearch() {
   const [searchValue, setSearchValue] = useState("");
-  const { query, filter, nsfw, max_id } = useSelector(state => ({
+  const { query, sort, nsfw, max_id } = useSelector(state => ({
     query: state.app.query,
-    filter: state.app.filter,
+    sort: state.app.sort,
     nsfw: state.app.nsfw,
     max_id: state.app.max_id
   }));
@@ -23,7 +23,7 @@ function NavSearch() {
     if (query !== searchValue) {
       max_id_next = 0;
     }
-    dispatch(getTweets(searchValue, filter, nsfw, max_id_next));
+    dispatch(getTweets(searchValue, sort, nsfw, max_id_next));
   };
 
   return (

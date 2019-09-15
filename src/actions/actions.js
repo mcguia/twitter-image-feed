@@ -2,7 +2,7 @@ import axios from "axios";
 
 const url = "http://localhost:9000/tweets";
 
-export const fetchTweets = (tweets, query, filter, nsfw) => {
+export const fetchTweets = (tweets, query, sort, nsfw) => {
   var max_id = "0";
   if (tweets.length > 0) {
     max_id = tweets[tweets.length - 1].id_str;
@@ -10,13 +10,13 @@ export const fetchTweets = (tweets, query, filter, nsfw) => {
 
   return {
     type: "GET_TWEETS_SUCCESS",
-    payload: { tweets, query, filter, nsfw, max_id }
+    payload: { tweets, query, sort, nsfw, max_id }
   };
 };
 
 export const getTweets = (
   query = "#art",
-  filter = "mixed",
+  sort = "mixed",
   nsfw = "false",
   max_id = "0"
 ) => dispatch => {
@@ -27,14 +27,14 @@ export const getTweets = (
         "?q=" +
         encodeURIComponent(query) +
         "&result_type=" +
-        filter +
+        sort +
         "&max_id=" +
         max_id +
         "&nsfw=" +
         nsfw
     )
     .then(response => {
-      dispatch(fetchTweets(response.data.statuses, query, filter, nsfw));
+      dispatch(fetchTweets(response.data.statuses, query, sort, nsfw));
     })
     .catch(error => {
       dispatch({
@@ -44,24 +44,24 @@ export const getTweets = (
     });
 };
 
-export const setFilter = (query, filter, nsfw, max_id) => dispatch => {
-  return dispatch(getTweets(query, filter, nsfw, max_id))
+export const setsort = (query, sort, nsfw, max_id) => dispatch => {
+  return dispatch(getTweets(query, sort, nsfw, max_id))
     .then(() => {
       dispatch({
-        type: "SET_FILTER_SUCCESS",
-        payload: filter
+        type: "SET_SORT_SUCCESS",
+        payload: sort
       });
     })
     .catch(error => {
       dispatch({
-        type: "SET_FILTER_FAILURE",
+        type: "SET_SORT_FAILURE",
         payload: error
       });
     });
 };
 
-export const setNsfw = (query, filter, nsfw, max_id) => dispatch => {
-  return dispatch(getTweets(query, filter, nsfw, max_id))
+export const setNsfw = (query, sort, nsfw, max_id) => dispatch => {
+  return dispatch(getTweets(query, sort, nsfw, max_id))
     .then(() => {
       dispatch({
         type: "SET_NSFW_SUCCESS",

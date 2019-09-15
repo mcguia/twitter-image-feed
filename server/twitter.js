@@ -11,14 +11,14 @@ class Twitter {
     });
   }
 
-  getTweets(search, filter, max_id, nsfw, callback) {
-    var searchQuery = search + " filter:media -filter:retweets";
-    if (nsfw === "false") searchQuery += "  filter:safe";
+  getTweets(search, sort, max_id, nsfw, callback) {
+    var searchQuery = search + " sort:media -sort:retweets";
+    if (nsfw === "false") searchQuery += " sort:safe -#nsfw -#porn";
     this.T.get(
       "search/tweets",
       {
         q: searchQuery,
-        result_type: filter,
+        result_type: sort,
         count: 20,
         tweet_mode: "extended",
         include_entities: true,
