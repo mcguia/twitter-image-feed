@@ -12,8 +12,8 @@ class Twitter {
   }
 
   getTweets(search, sort, max_id, nsfw, callback) {
-    var searchQuery = search + " sort:media -sort:retweets";
-    if (nsfw === "false") searchQuery += " sort:safe -#nsfw -#porn";
+    var searchQuery = search + " filter:media -filter:retweets";
+    if (nsfw === "false") searchQuery += " filter:safe -#nsfw -#porn";
     this.T.get(
       "search/tweets",
       {
