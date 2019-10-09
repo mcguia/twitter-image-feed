@@ -1,5 +1,6 @@
 const express = require("express");
 const _ = require("lodash");
+const cors = require("cors");
 const config = require("./config");
 const routes = require("./routes");
 const Twitter = require("./twitter");
@@ -15,14 +16,7 @@ class App {
 
   configure() {
     this.app = express();
-    this.app.use(function(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-      );
-      next();
-    });
+    this.app.use(cors());
 
     routes.configureRoutes(this.app, this.config);
   }

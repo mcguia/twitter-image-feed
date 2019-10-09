@@ -23,11 +23,10 @@ function fetchTweetsReducer(state = INITIAL_STATE, { type, payload }) {
       var more = true;
 
       if (state.sort !== payload.sort || state.nsfw !== payload.nsfw) {
-        /** if sort or nsfw changed, return new batch of tweets **/
+        //if sort or nsfw changed, return new batch of tweets
         rest = [...payload.tweets];
       } else if (state.max_id !== "0" && payload.query === state.query) {
-        /** if max_id set, and query hasn't changed, retain tweet list.
-      slice off duplicate tweet **/
+        // if same query, retain tweet list, slice duplicate
         if (payload.tweets.length < 3 || state.max_id === payload.max_id) {
           rest = payload.tweets.slice(0, 1);
           more = false;

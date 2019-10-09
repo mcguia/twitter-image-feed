@@ -44,7 +44,7 @@ export const getTweets = (
     });
 };
 
-export const setsort = (query, sort, nsfw, max_id) => dispatch => {
+export const setSort = (query, sort, nsfw, max_id) => dispatch => {
   return dispatch(getTweets(query, sort, nsfw, max_id))
     .then(() => {
       dispatch({

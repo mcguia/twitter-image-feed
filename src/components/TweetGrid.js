@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroller";
 import { Empty, Select, Switch, Typography } from "antd";
-import { getTweets, setsort, setNsfw } from "../actions/actions";
+import { getTweets, setSort, setNsfw } from "../actions/actions";
 import styled from "styled-components";
 import Loading from "./Loading";
 import Tweet from "./Tweet";
@@ -65,7 +65,7 @@ function TweetGrid() {
   const dispatch = useDispatch();
 
   const handleChange = value => {
-    dispatch(setsort(query, value, nsfw, max_id));
+    dispatch(setSort(query, value, nsfw, max_id));
   };
   const nsfwChange = value => {
     dispatch(setNsfw(query, sort, value, max_id));
