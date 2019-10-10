@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import { Button, Layout, Menu } from "antd";
+import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Layout, Menu } from "antd";
 import NavSearch from "./NavSearch";
 import styled from "styled-components";
 
 const { Header } = Layout;
 
 const StyledMenu = styled(Menu)`
-  .ant-menu-item {
-    float: right;
-  }
   .ant-input-search {
     position: absolute;
     top: 17px;
@@ -17,6 +16,7 @@ const StyledMenu = styled(Menu)`
 `;
 class Nav extends Component {
   render() {
+    const { location } = this.props;
     return (
       <Layout className="layout">
         <Header>
@@ -24,13 +24,22 @@ class Nav extends Component {
           <StyledMenu
             theme="dark"
             mode="horizontal"
+            selectedKeys={[location.pathname]}
             style={{ lineHeight: "64px", marginRight: "200px" }}
             collapsible="false"
           >
-            <Menu.Item key="1">
-              <Button ghost>Sign in with Twitter</Button>
+            <Menu.Item key="/">
+              <Link to="/">Image Search</Link>
             </Menu.Item>
-            <NavSearch />
+
+            <Menu.Item key="/timeline">
+              <Link to="/timeline">User Timeline</Link>
+            </Menu.Item>
+
+            <NavSearch
+              query={this.props.query}
+              setQuery={this.props.setQuery}
+            />
           </StyledMenu>
         </Header>
       </Layout>
@@ -38,4 +47,9 @@ class Nav extends Component {
   }
 }
 
-export default Nav;
+Nav.propTypes = {
+  location: PropTypes.string.isRequired,
+  query: PropTypes.string.isRequired
+};
+
+export default withRouter(Nav);

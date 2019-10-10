@@ -5,10 +5,30 @@ class Twitter {
     this.T = new Twit({
       consumer_key: config.twitterConsumerKey,
       consumer_secret: config.twitterConsumerSecret,
-      access_token: config.twitterAccessToken,
-      access_token_secret: config.twitterAccessSecret,
+      app_only_auth: true,
       timeout_ms: 60 * 1000
     });
+  }
+
+  getTimeline(screen_name, max_id, callback) {
+    this.T.get(
+      "statuses/home_timeline",
+      {
+        screen_name: screen_name,
+        count: 20,
+        tweet_mode: "extended",
+        include_entities: true,
+        entities: true,
+        max_id: max_id
+      },
+      (err, data, response) => {
+        if (err) {
+          console.error(err);
+          return callback(err);
+        }
+        callback(null, data);
+      }
+    );
   }
 
   getTweets(search, sort, max_id, nsfw, callback) {

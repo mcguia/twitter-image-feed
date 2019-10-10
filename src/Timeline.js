@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ImageSearch from "./components/ImageSearch";
 import Nav from "./components/Nav";
 
-const App = () => {
+const Timeline = () => {
   const [query, setQuery] = useState("#art");
   return (
     <div className="App">
@@ -12,4 +12,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Timeline;

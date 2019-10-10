@@ -9,16 +9,12 @@ module.exports = {
   port: process.env.PORT || "9000",
   templatePath: path.join(staticContentLocation, "index.html"),
   twitterConsumerKey: process.env.CONSUMER_KEY,
-  twitterConsumerSecret: process.env.CONSUMER_SECRET,
-  twitterAccessToken: process.env.ACCESS_TOKEN,
-  twitterAccessSecret: process.env.ACCESS_SECRET
+  twitterConsumerSecret: process.env.CONSUMER_SECRET
 };
 
 if (
   !module.exports.twitterConsumerKey ||
-  !module.exports.twitterConsumerSecret ||
-  !module.exports.twitterAccessToken ||
-  !module.exports.twitterAccessSecret
+  !module.exports.twitterConsumerSecret
 ) {
   throw new Error("Please provide valid Twitter credentials");
 }
