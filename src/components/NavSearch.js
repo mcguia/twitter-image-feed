@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Input } from "antd";
 const { Search } = Input;
 
-function NavSearch() {
+const NavSearch = ({ options, setOptions }) => {
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearchValue = e => {
@@ -10,7 +11,7 @@ function NavSearch() {
   };
 
   const onSearchFunction = () => {
-    this.props.setQuery(searchValue);
+    setOptions({ ...options, query: searchValue, isFetching: false });
   };
 
   return (
@@ -21,6 +22,11 @@ function NavSearch() {
       style={{ width: 200 }}
     />
   );
-}
+};
+
+NavSearch.propTypes = {
+  options: PropTypes.object.isRequired,
+  setOptions: PropTypes.func.isRequired
+};
 
 export default NavSearch;

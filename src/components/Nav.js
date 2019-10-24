@@ -37,8 +37,8 @@ class Nav extends Component {
             </Menu.Item>
 
             <NavSearch
-              query={this.props.query}
-              setQuery={this.props.setQuery}
+              options={this.props.options}
+              setOptions={this.props.setOptions}
             />
           </StyledMenu>
         </Header>
@@ -48,8 +48,9 @@ class Nav extends Component {
 }
 
 Nav.propTypes = {
-  location: PropTypes.string.isRequired,
-  query: PropTypes.string.isRequired
+  location: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  setOptions: PropTypes.func.isRequired
 };
 
 export default withRouter(Nav);

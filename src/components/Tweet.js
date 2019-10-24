@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { Card, Icon } from "antd";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import TweetModal, { useModal } from "./TweetModal";
@@ -12,6 +11,7 @@ const TwitterCard = styled(Card)`
   padding-top: 78.22%;
   position: relative;
   width: 100%;
+  cursor: pointer;
 `;
 const ThumbnailContent = styled.div`
   height: 100%;
@@ -97,23 +97,21 @@ const Tweet = ({ tweet }) => {
     if (!tweet.extended_entities) return null;
     const images = tweet.extended_entities.media;
 
-    return images.map(img => (
-      <div className="image-item" key={img.id}>
-        <TwitterCard hoverable>
-          <Link onClick={toggle}>
-            <ThumbnailContent>
-              <ThumbnailImg
-                alt="twitter"
-                src={img.media_url_https + "?format=jpg&name=small"}
-              />
-            </ThumbnailContent>
-            <Info>
-              <Credits>
-                {getDetails(tweet)}
-                {getStats(tweet)}
-              </Credits>
-            </Info>
-          </Link>
+    return images.map((img, i) => (
+      <div className="image-item" key={i + img.id}>
+        <TwitterCard onClick={toggle} hoverable>
+          <ThumbnailContent>
+            <ThumbnailImg
+              alt="twitter"
+              src={img.media_url_https + "?format=jpg&name=small"}
+            />
+          </ThumbnailContent>
+          <Info>
+            <Credits>
+              {getDetails(tweet)}
+              {getStats(tweet)}
+            </Credits>
+          </Info>
         </TwitterCard>
       </div>
     ));

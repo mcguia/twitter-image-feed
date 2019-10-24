@@ -31,7 +31,7 @@ class Twitter {
     );
   }
 
-  getTweets(search, sort, max_id, nsfw, callback) {
+  getTweets(search, sort, max_id, nsfw, fetch, callback) {
     var searchQuery = search + " filter:media -filter:retweets";
     if (nsfw === "false") searchQuery += " filter:safe -#nsfw -#porn";
     this.T.get(
@@ -50,7 +50,22 @@ class Twitter {
           console.error(err);
           return callback(err);
         }
-        callback(null, data);
+
+        let parsed_data = { hasMore: true, tweets: [] };
+
+        // remove duplicate on paginated query
+        if (fetch === "true") {
+          if (data.statuses.length < 3)
+            parsed_data.tweets = data.statuses.slice(0, 1);
+          else
+            parsed_data.tweets = data.statuses.slice(1, data.statuses.length);
+        } else parsed_data.tweets = data.statuses;
+
+        if (data.statuses.length < 20) {
+          parsed_data.hasMore = false;
+        }
+
+        callback(null, parsed_data);
       }
     );
   }

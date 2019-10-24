@@ -3,11 +3,16 @@ import ImageSearch from "./components/ImageSearch";
 import Nav from "./components/Nav";
 
 const Timeline = () => {
-  const [query, setQuery] = useState("#art");
+  const [options, setOptions] = useState({
+    query: "#art",
+    nsfw: false,
+    sort: "mixed",
+    isFetching: false
+  });
   return (
-    <div className="App">
-      <Nav query={query} setQuery={setQuery} />
-      <ImageSearch query={query} />
+    <div className="Timeline">
+      <Nav options={options} setOptions={setOptions} />
+      <ImageSearch options={options} setOptions={setOptions} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import InfiniteScroll from "react-infinite-scroller";
+import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Empty, Select, Switch, Typography } from "antd";
 import styled from "styled-components";
 import Loading from "./Loading";
@@ -22,6 +23,7 @@ const ImageGrid = styled(InfiniteScroll)`
   display: -ms-inline-grid;
   display: inline-grid;
   grid-gap: 20px;
+  overflow: hidden !important;
   -ms-grid-columns: (1fr) [5];
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
@@ -40,86 +42,53 @@ const ImageGrid = styled(InfiniteScroll)`
   }
 `;
 
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  console.log(ref);
-  return ref;
-}
-
-const ImageSearch = ({ query }) => {
+const ImageSearch = ({ options, setOptions }) => {
+  const [data, setData] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
-  const [data, setData] = useState({ tweets: [] });
-  const [nsfw, setNsfw] = useState(false);
-  const [sort, setSort] = useState("mixed");
-  const [maxid, setMaxid] = useState("0");
-  const [hasMore, setHasMore] = useState(true);
-  const prevParams = usePrevious(sort);
+  const [isError, setIsError] = useState(null);
 
-  // TODO: just separate useEffect for sort, nsfw, query
-  useEffect(
-    () => {
-      console.log(prevParams.current, sort);
-      const fetchData = async () => {
-        setIsLoading(true);
+  const maxid = useRef("0");
+  // sort or nsfw change, fetch new list
+
+  function fetchMoreTweets() {
+    setOptions({ ...options, isFetching: true });
+  }
+
+  useEffect(() => {
+    const searchAPI = async () => {
+      setIsLoading(true);
+      try {
         const result = await axios(
           `http://localhost:9000/tweets?q=${encodeURIComponent(
-            query
-          )}&result_type=${sort}&max_id=${maxid}&nsfw=${nsfw}`
+            options.query
+          )}&result_type=${options.sort}&max_id=${maxid.current}&nsfw=${
+            options.nsfw
+          }&fetch=${options.isFetching}`
         );
-        console.log(query);
-        console.log(
-          `http://localhost:9000/tweets?q=${encodeURIComponent(
-            query
-          )}&result_type=${sort}&max_id=${maxid}&nsfw=${nsfw}`
-        );
-
-        var rest;
-        var more = true;
-
-        const result_data = result.data.statuses;
-        console.log(prevParams, sort);
-
-        if (
-          sort !== prevParams.current.sort ||
-          nsfw !== prevParams.current.nsfw
-        ) {
-          //if sort or nsfw changed, return new batch of tweets
-          rest = [...result_data];
-          console.log(1);
-        } else if (maxid !== "0" && query === prevParams.current.query) {
-          // if same query, retain tweet list, slice duplicate
-          if (result_data.length < 3) {
-            rest = result_data.slice(0, 1);
-            more = false;
-            console.log(2);
-          } else {
-            rest = result_data.slice(1, result_data.length);
-            console.log(3);
-          }
-
-          rest = [...data, ...rest];
-        } else {
-          rest = result_data;
+        if (options.isFetching)
+          setData(data => [...data, ...result.data.tweets]);
+        else {
+          setData(result.data.tweets);
         }
+        setHasMore(result.data.hasMore);
+      } catch (error) {
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    searchAPI();
+  }, [options]);
 
-        setData(rest);
-        setHasMore(more);
-        setIsFetching(false);
-        if (rest.length > 0) {
-          setMaxid(rest[rest.length - 1].id_str);
-        }
-        setIsLoading(false);
-      };
-      fetchData();
-    }, // eslint-disable-next-line
-    [query, sort, nsfw, isFetching]
-  );
+  useEffect(() => {
+    if (data && data.length > 0) {
+      maxid.current = data[data.length - 1].id_str;
+    }
+  }, [data]);
 
-  if (isLoading && !data.length) {
+  if (isError) return <div>Something went wrong...</div>;
+
+  if (isLoading && !data) {
     return (
       <div style={{ textAlign: "center", padding: "3em" }}>
         <Loading />
@@ -127,47 +96,52 @@ const ImageSearch = ({ query }) => {
     );
   }
 
-  var items = [];
-
-  if (data.length) {
-    data.forEach((tweet, i) => {
-      items.push(<Tweet tweet={tweet} key={i} />);
-    });
-  }
-
   return (
     <div>
       <SelectContainer>
         <Select
-          defaultValue={sort}
+          defaultValue={options.sort}
           style={{ width: 120, paddingRight: "3em" }}
-          onChange={value => setSort(value)}
+          onChange={value =>
+            setOptions({ ...options, sort: value, isFetching: false })
+          }
         >
           <Option value="recent">Recent</Option>
           <Option value="mixed">Mixed</Option>
           <Option value="popular">Popular</Option>
         </Select>
         <Text style={{ paddingRight: "1em" }}>include NSFW</Text>
-        <Switch onChange={value => setNsfw(value)} />
+        <Switch
+          onChange={value =>
+            setOptions({ ...options, nsfw: value, isFetching: false })
+          }
+        />
       </SelectContainer>
 
-      {!isLoading && !data.length ? (
+      {!isLoading && !data ? (
         <Empty
           description="Sorry, no tweets available."
           style={{ padding: "3em" }}
         />
       ) : (
         <ImageGrid
+          dataLength={data.length}
           pageStart={0}
-          loadMore={() => setIsFetching(true)}
-          hasMore={!isLoading && hasMore}
+          next={fetchMoreTweets}
+          hasMore={hasMore}
           loader={<Loading />}
+          endMessage={<p>End of tweets.</p>}
         >
-          {items}
+          {data && data.map((tweet, i) => <Tweet tweet={tweet} key={i} />)}
         </ImageGrid>
       )}
     </div>
   );
+};
+
+ImageSearch.propTypes = {
+  options: PropTypes.object.isRequired,
+  setOptions: PropTypes.func.isRequired
 };
 
 export default ImageSearch;
