@@ -1,19 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, BrowserRouter as Router } from "react-router-dom";
-import { Provider } from "react-redux";
 import "./index.css";
 import App from "./App";
-import Timeline from "./Timeline";
 import * as serviceWorker from "./serviceWorker";
-import store from "./store/store";
 
 const routing = (
   <Router>
-    <Provider store={store}>
-      <Route exact path="/" component={App} />
-      <Route path="/timeline" component={Timeline} />
-    </Provider>
+    <Route exact path="/" component={App} />
   </Router>
 );
 

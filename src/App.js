@@ -5,6 +5,8 @@ import Nav from "./components/Nav";
 const App = () => {
   const [options, setOptions] = useState({
     query: "#art",
+    user: "",
+    max_id: "0",
     nsfw: false,
     sort: "mixed",
     isFetching: false

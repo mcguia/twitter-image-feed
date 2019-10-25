@@ -47,31 +47,34 @@ const ImageSearch = ({ options, setOptions }) => {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
+  let max_id = useRef("0");
 
-  const maxid = useRef("0");
-  // sort or nsfw change, fetch new list
-
+  // trigger infinite load
   function fetchMoreTweets() {
-    setOptions({ ...options, isFetching: true });
+    setOptions({ ...options, max_id: max_id.current, isFetching: true });
   }
 
   useEffect(() => {
     const searchAPI = async () => {
       setIsLoading(true);
+      var maxid = options.max_id;
       try {
         const result = await axios(
           `http://localhost:9000/tweets?q=${encodeURIComponent(
             options.query
-          )}&result_type=${options.sort}&max_id=${maxid.current}&nsfw=${
-            options.nsfw
-          }&fetch=${options.isFetching}`
+          )}&user=${options.user}&result_type=${
+            options.sort
+          }&max_id=${maxid}&nsfw=${options.nsfw}&fetch=${options.isFetching}`
         );
+        // infinite load: append to data
         if (options.isFetching)
           setData(data => [...data, ...result.data.tweets]);
+        // query, sort, nsfw change: reset data
         else {
           setData(result.data.tweets);
         }
         setHasMore(result.data.hasMore);
+        max_id.current = result.data.max_id;
       } catch (error) {
         setIsError(true);
       }
@@ -80,15 +83,9 @@ const ImageSearch = ({ options, setOptions }) => {
     searchAPI();
   }, [options]);
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      maxid.current = data[data.length - 1].id_str;
-    }
-  }, [data]);
-
   if (isError) return <div>Something went wrong...</div>;
 
-  if (isLoading && !data) {
+  if (isLoading && !data.length) {
     return (
       <div style={{ textAlign: "center", padding: "3em" }}>
         <Loading />
@@ -102,9 +99,15 @@ const ImageSearch = ({ options, setOptions }) => {
         <Select
           defaultValue={options.sort}
           style={{ width: 120, paddingRight: "3em" }}
-          onChange={value =>
-            setOptions({ ...options, sort: value, isFetching: false })
-          }
+          onChange={value => {
+            max_id.current = "0";
+            setOptions({
+              ...options,
+              max_id: "0",
+              sort: value,
+              isFetching: false
+            });
+          }}
         >
           <Option value="recent">Recent</Option>
           <Option value="mixed">Mixed</Option>
@@ -112,13 +115,19 @@ const ImageSearch = ({ options, setOptions }) => {
         </Select>
         <Text style={{ paddingRight: "1em" }}>include NSFW</Text>
         <Switch
-          onChange={value =>
-            setOptions({ ...options, nsfw: value, isFetching: false })
-          }
+          onChange={value => {
+            max_id.current = "0";
+            setOptions({
+              ...options,
+              max_id: "0",
+              nsfw: value,
+              isFetching: false
+            });
+          }}
         />
       </SelectContainer>
 
-      {!isLoading && !data ? (
+      {!isLoading && !data.length ? (
         <Empty
           description="Sorry, no tweets available."
           style={{ padding: "3em" }}

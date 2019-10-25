@@ -11,7 +11,21 @@ const NavSearch = ({ options, setOptions }) => {
   };
 
   const onSearchFunction = () => {
-    setOptions({ ...options, query: searchValue, isFetching: false });
+    const regex = /from:\s+(\w+)/;
+    const usermatch = regex.exec(searchValue);
+    let query = searchValue;
+    let user = "";
+    if (usermatch !== null) {
+      query = searchValue.replace(usermatch[0], "");
+      user = usermatch[1];
+    }
+    setOptions({
+      ...options,
+      query: query,
+      max_id: "0",
+      user: user,
+      isFetching: false
+    });
   };
 
   return (

@@ -32,10 +32,6 @@ class Nav extends Component {
               <Link to="/">Image Search</Link>
             </Menu.Item>
 
-            <Menu.Item key="/timeline">
-              <Link to="/timeline">User Timeline</Link>
-            </Menu.Item>
-
             <NavSearch
               options={this.props.options}
               setOptions={this.props.setOptions}
