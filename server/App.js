@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const _ = require("lodash");
 const cors = require("cors");
@@ -18,6 +19,7 @@ class App {
     this.app = express();
     this.app.use(cors());
     routes.configureRoutes(this.app, this.config);
+
     if (process.env.NODE_ENV === "production") {
       // Serve any static files
       this.app.use(express.static(path.join(__dirname, "../build")));
