@@ -17,7 +17,7 @@ Built with the following:
 ## Setup
 
 1. [Apply for a Twitter developer account](https://developer.twitter.com/en/apply) and create a Twitter developer app.
-2. Generate API keys and add them to a .env file in the root project directory, defined as ACCESS_TOKEN and ACCESS_SECRET.
+2. Generate API keys and add them to a .env file in the root project directory, defined as CONSUMER_KEY and CONSUMER_SECRET.
 3. `yarn install`
 4. Start server: `yarn run start-server`
 5. Start client: `yarn run start`
@@ -33,8 +33,8 @@ Built with the following:
 2. Set Heroku environment variables
 
    ```bash
-   heroku config:set ACCESS_TOKEN=XXXXX
-   heroku config:set ACCESS_SECRET=XXXXX
+   heroku config:set CONSUMER_KEY=XXXXX
+   heroku config:set CONSUMER_SECRET=XXXXX
    heroku config:set REDIRECT_URI=https://app-name.herokuapp.com/callback
    heroku config:set FRONTEND_URI=https://app-name.herokuapp.com
    ```

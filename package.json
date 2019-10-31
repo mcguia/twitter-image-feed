@@ -22,13 +22,14 @@
     "styled-components": "^5.0.0-beta.8",
     "twit": "^2.2.11"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:9000",
   "scripts": {
     "start": "react-app-rewired start",
     "start-server": "node ./server/App.js",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "heroku-postbuild": "npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "browserslist": {
     "production": [
