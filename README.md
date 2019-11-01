@@ -44,5 +44,3 @@ Built with the following:
    ```bash
    git push heroku master
    ```
-
-4. Add `http://app-name.herokuapp.com/callback` as a Redirect URI in the Twitter application settings
