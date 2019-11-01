@@ -4,6 +4,8 @@
 
 Perform search on words as well as hashtags. Use `from: username` to view a user's media tweets.
 
+[View Demo](https://twitter-image-feed-react.herokuapp.com)
+
 Built with the following:
 
 -  [Twitter Search API](https://developer.twitter.com/en/docs)
@@ -19,8 +21,8 @@ Built with the following:
 1. [Apply for a Twitter developer account](https://developer.twitter.com/en/apply) and create a Twitter developer app.
 2. Generate API keys and add them to a .env file in the root project directory, defined as CONSUMER_KEY and CONSUMER_SECRET.
 3. `yarn install`
-4. Start server: `yarn run start-server`
-5. Start client: `yarn run start`
+4. Start server: `yarn run start`
+5. Start client: `cd client && yarn run start`
 
 ## Deploying to Heroku
 
@@ -35,8 +37,6 @@ Built with the following:
    ```bash
    heroku config:set CONSUMER_KEY=XXXXX
    heroku config:set CONSUMER_SECRET=XXXXX
-   heroku config:set REDIRECT_URI=https://app-name.herokuapp.com/callback
-   heroku config:set FRONTEND_URI=https://app-name.herokuapp.com
    ```
 
 3. Push to Heroku

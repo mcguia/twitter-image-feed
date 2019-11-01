@@ -98,7 +98,7 @@ const ImageSearch = ({ options, setOptions }) => {
       <SelectContainer>
         <Select
           defaultValue={options.sort}
-          style={{ width: 120, paddingRight: "3em" }}
+          style={{ width: 140, paddingRight: "3em" }}
           onChange={value => {
             max_id.current = "0";
             setOptions({
