@@ -9,6 +9,11 @@ import Tweet from "./Tweet";
 const { Text } = Typography;
 const { Option } = Select;
 
+const SearchHeader = styled.div`
+  background: #fff;
+  padding: 20px 30px;
+  border-bottom: 1px solid #f2f2f2;
+`;
 const SelectContainer = styled.div`
   background: #fff;
   padding: 20px 30px;
@@ -50,9 +55,24 @@ const ImageSearch = ({ options, setOptions }) => {
   let max_id = useRef("0");
 
   // trigger infinite load
-  function fetchMoreTweets() {
+  const fetchMoreTweets = () => {
     setOptions({ ...options, max_id: max_id.current, isFetching: true });
-  }
+  };
+
+  const getSearchHeader = () => {
+    if (options.query || options.user) {
+      let searchText = "Search results";
+      if (options.query) searchText += ` for ${options.query}`;
+      if (options.user) searchText += ` from @${options.user}`;
+      return (
+        <SearchHeader>
+          <Text style={{ fontSize: 18 }} strong={true}>
+            {searchText}
+          </Text>
+        </SearchHeader>
+      );
+    } else return null;
+  };
 
   useEffect(() => {
     const searchAPI = async () => {
@@ -95,6 +115,7 @@ const ImageSearch = ({ options, setOptions }) => {
 
   return (
     <div>
+      {getSearchHeader()}
       <SelectContainer>
         <Select
           defaultValue={options.sort}

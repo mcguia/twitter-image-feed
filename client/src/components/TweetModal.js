@@ -10,7 +10,7 @@ import {
   Typography
 } from "antd";
 import styled from "styled-components";
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const UserInfo = styled.div`
   -webkit-box-direction: normal;
@@ -44,6 +44,12 @@ const UserLink = styled.a`
   flex-direction: column;
   display: flex;
 `;
+const TweetText = styled.div`
+  padding-bottom: 2rem;
+`;
+const TweetDate = styled.div`
+  padding-top: 1rem;
+`;
 const CarouselWrapper = styled.div`
   .ant-carousel .slick-slide {
     text-align: center;
@@ -56,9 +62,7 @@ const CarouselWrapper = styled.div`
     color: #fff;
   }
 `;
-const ImageItem = styled.div`
-  padding-bottom: 2em;
-`;
+const ImageItem = styled.div``;
 const Level = styled.div`
   display: flex;
   align-items: center;
@@ -154,12 +158,15 @@ const TweetModal = ({ cancel, tweet, visible }) => {
           </UserLink>
         </Username>
       </UserInfo>
-
-      <Title level={4} style={{ paddingBottom: "1rem" }}>
-        {tweet.full_text}
-      </Title>
+      <TweetText>
+        <Text style={{ fontSize: 18 }} strong={true}>
+          {tweet.full_text}
+        </Text>
+      </TweetText>
       <TweetImage />
-      <Text>{date}</Text>
+      <TweetDate>
+        <Text strong={true}>{date}</Text>
+      </TweetDate>
       <Divider />
       <Level>
         <LevelLeft>
