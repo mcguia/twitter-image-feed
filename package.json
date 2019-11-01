@@ -29,7 +29,8 @@
     "start-server": "node ./server/App.js",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "yarn run start-server"
   },
   "browserslist": {
     "production": [

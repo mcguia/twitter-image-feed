@@ -4,7 +4,7 @@ const Twitter = require("./twitter");
 module.exports.configureRoutes = (app, config) => {
   const twitter = new Twitter(config);
 
-  app.get("/tweets", (req, res) => {
+  app.get("/api/tweets", (req, res) => {
     let query = "";
     let sort = "mixed";
     let max_id = req.query.max_id;

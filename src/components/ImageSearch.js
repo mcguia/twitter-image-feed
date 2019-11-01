@@ -60,7 +60,7 @@ const ImageSearch = ({ options, setOptions }) => {
       var maxid = options.max_id;
       try {
         const result = await axios(
-          `/tweets?q=${encodeURIComponent(options.query)}&user=${
+          `/api/tweets?q=${encodeURIComponent(options.query)}&user=${
             options.user
           }&result_type=${options.sort}&max_id=${maxid}&nsfw=${
             options.nsfw
