@@ -5,7 +5,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "lodash": "^4.17.21",
     "twit": "^2.2.11"
   },
